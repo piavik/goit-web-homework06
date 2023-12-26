@@ -10,16 +10,16 @@ NUMBER_OF_SUBJECTS = 8
 NUMBER_OF_LECTORS = 5
 NUMBER_OF_SCORES = 20
 
-db_name = "test_database"
+db_name = "work_database"
 
 
-def create_db(db_name: str ="fake", create_sql: str="fake_db_init") -> None:
+def create_db(db_name: str ="fake", create_sql: str="db_init") -> None:
     # read sql script for DB creation
     with open(f'{create_sql}.sql', 'r') as f:
         sql = f.read()
 
     # make DB connection (create DB if no file)
-    with sqlite3.connect(f'{db_name}.db') as con:
+    with sqlite3.connect(f'{db_name}.sqlite') as con:
         cur = con.cursor()
         # run init script
         cur.executescript(sql)
@@ -35,8 +35,8 @@ def generate_fake_data(
     fake_data = faker.Faker()
 
     fake_groups = [ "Aboltusy", "Barany", "Chmoni" ]
-    fake_students = [fake_data.name() for _ in range(students)]
-    fake_lectors  = [fake_data.name() for _ in range(lectors)]
+    fake_students = [fake_data.unique.name() for _ in range(students)]
+    fake_lectors  = [fake_data.unique.name() for _ in range(lectors)]
 
     # subject list from
     # https://www.britishuni.com/subject-guide/subject-list
@@ -71,11 +71,10 @@ def prepare_data(groups: list, students: list, lectors: list, subjects: list, sc
 
     return for_groups, for_students, for_lectors, for_subjects, for_scores
 
-
 def insert_data_to_db(groups: tuple, students: tuple, lectors: tuple, subjects: tuple, scores: tuple, db_name: str ="fake") -> None:
     # Створимо з'єднання з нашою БД та отримаємо об'єкт курсору для маніпуляцій з даними
 
-    with sqlite3.connect(f'{db_name}.db') as con:
+    with sqlite3.connect(f'{db_name}.sqlite') as con:
         # get DB cursor
         cur = con.cursor()
 
@@ -95,8 +94,6 @@ def insert_data_to_db(groups: tuple, students: tuple, lectors: tuple, subjects: 
 
         # Commit DB change
         con.commit()
-
-
 
 if __name__ == "__main__":
     groups, students, lectors, subjects, scores = prepare_data(*generate_fake_data())
