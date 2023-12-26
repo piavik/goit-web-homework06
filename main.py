@@ -1,31 +1,26 @@
-
-from datetime import datetime
-from random import randint, choice
 import sqlite3
-import faker
 
-# from create_db import create_db
-# from fill_data import generate_fake_data
+from create_fake_db import create_db, generate_fake_data, prepare_data, insert_data_to_db
 
-NUMBER_OF_STUDENTS = 50
-NUMBER_OF_GROUPS = 3
-NUMBER_OF_SUBJECTS = 8
-NUMBER_OF_LECTORS = 5
-NUMBER_OF_SCORES = 20
+DATA_BASE = "work_database"
 
-# db_name
-# create_sql = 
+def generate_db(db_name:str = DATA_BASE) -> None:
+    groups, students, lectors, subjects, scores = prepare_data(*generate_fake_data())
+    create_db(db_name)
+    insert_data_to_db(groups, students, lectors, subjects, scores, db_name)
 
-def prepare_data():
-    ...
-
-def insert_data_to_db(companies, employees, payments) -> None:
-    ...
-
-def main() -> None:
-    ...
-
+def main(db_name) -> None:
+    generate_db(db_name)
+    with sqlite3.connect(f'{db_name}.sqlite') as con:
+        cur = con.cursor()
+        for query_number in range(1, 13):
+            with open(f'query_{query_number:02}.sql') as file:
+                sql = file.read()
+            cur.execute(sql)
+            print(sql.split('\n')[0])
+            result = cur.fetchall()
+            print(result)
 
 
 if __name__ == "__main__":
-    main()
+    main(DATA_BASE)
