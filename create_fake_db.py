@@ -34,7 +34,7 @@ def generate_fake_data(
 
     fake_data = faker.Faker()
 
-    fake_groups = [ "Aboltusy", "Barany", "Chmoni" ]
+    fake_groups = [ "Aboltusy", "Barany", "Cundri" ]
     fake_students = [fake_data.unique.name() for _ in range(students)]
     fake_lectors  = [fake_data.unique.name() for _ in range(lectors)]
 
@@ -51,9 +51,9 @@ def generate_fake_data(
     study_start = datetime(datetime.now().year-offset, 9, 1).date()
     # in study date range (from SEP-01 until today)
     # generate fake dates for each score
-    # that each student has got for all the subjects
+    # that each student has got for all the subjects he attends
     # PS: до 20 оцінок у кожного студента з усіх предметів
-    fake_dates = [fake_data.date_between(study_start, study_end) for _ in range(students*randint(1,number_of_scores))]
+    fake_dates = [fake_data.date_between(study_start, study_end) for _ in range(int(students*number_of_scores/2))]
 
     return fake_groups, fake_students, fake_lectors, fake_subjects, fake_dates
 
@@ -79,10 +79,10 @@ def insert_data_to_db(groups: tuple, students: tuple, lectors: tuple, subjects: 
         cur = con.cursor()
 
         # prepare sql statements
-        sql_to_groups   = """INSERT INTO groups(group_name) VALUES (?)"""
-        sql_to_lectors  = """INSERT INTO lectors(lector_name) VALUES (?)"""
-        sql_to_students = """INSERT INTO students(student_name, group_id) VALUES (?, ?)"""
-        sql_to_subjects = """INSERT INTO subjects(subject_name, lector_id) VALUES (?, ?)"""
+        sql_to_groups   = """INSERT INTO groups(name) VALUES (?)"""
+        sql_to_lectors  = """INSERT INTO lectors(name) VALUES (?)"""
+        sql_to_students = """INSERT INTO students(name, group_id) VALUES (?, ?)"""
+        sql_to_subjects = """INSERT INTO subjects(name, lector_id) VALUES (?, ?)"""
         sql_to_scores   = """INSERT INTO scores(student_id, subject_id, score, score_date) VALUES (?, ?, ?, ?)"""
 
         # execute sql statements
