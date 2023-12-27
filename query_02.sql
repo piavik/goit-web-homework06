@@ -1,13 +1,13 @@
 --- Знайти студента із найвищим середнім балом з певного предмета.
-SELECT su.name as "Subject",
-       st.name as "Student",
-       ROUND(AVG(sc.score), 2) as "Average Score"
-FROM   students st, scores sc, subjects su
-WHERE  (sc.student_id = st.id
-       AND sc.subject_id = su.id
-       AND su.id = 8
-       )
-GROUP BY "Subject";
+-- SELECT su.name as "Subject",
+--        st.name as "Student",
+--        ROUND(AVG(sc.score), 2) as "Average Score"
+-- FROM   students st, scores sc, subjects su
+-- WHERE  (sc.student_id = st.id
+--        AND sc.subject_id = su.id
+--        AND su.id = 8
+--        )
+-- GROUP BY "Subject";
 
 
 -- with JOIN

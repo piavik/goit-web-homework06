@@ -10,7 +10,7 @@ JOIN    subjects su ON sc.subject_id = su.id
 JOIN    students st ON sc.student_id = st.id
 JOIN    groups g ON g.id = st.group_id
 WHERE   g.id = 2
-        AND su.id = 4
+        AND su.id = 5
 GROUP BY "Student"
 ORDER BY "Student"
 ;
